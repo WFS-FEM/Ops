@@ -1,0 +1,26 @@
+name: Decision
+description: A choice the project needs to make; the outcome is summarized in docs/decisions.md
+title: "[Decision] "
+labels: ["decision"]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Decision needed
+    validations:
+      required: true
+  - type: textarea
+    id: options
+    attributes:
+      label: Options considered
+      value: |
+        1.
+        2.
+  - type: input
+    id: by
+    attributes:
+      label: Needed by
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome and rationale (fill in when decided)
