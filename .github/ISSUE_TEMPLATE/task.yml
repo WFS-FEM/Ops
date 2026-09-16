@@ -1,0 +1,77 @@
+name: Task
+description: A unit of work toward one of the three objectives
+title: "[Task] "
+labels: []
+body:
+  - type: dropdown
+    id: objective
+    attributes:
+      label: Objective
+      options:
+        - I. Automation
+        - II. Integration
+        - III. Communication
+        - PM (project management)
+    validations:
+      required: true
+  - type: dropdown
+    id: product
+    attributes:
+      label: Product(s)
+      description: Select every product this task contributes to.
+      multiple: true
+      options:
+        - A. EwE model update
+        - B. SEDAR Mrt
+        - C. Shiny App
+        - D. R package
+        - E. IEA/ESR
+        - F. Peer-reviewed paper
+        - G. Report
+        - H. Other
+  - type: dropdown
+    id: stakeholder
+    attributes:
+      label: Stakeholder group(s)
+      description: Who this task is for.
+      multiple: true
+      options:
+        - A. SEFSC Gulf Fisheries Branch / SEDAR
+        - B. Gulf IEA / ESR
+        - C. Fisheries managers
+        - D. Ecosystem modelers
+        - E. Science community
+        - F. Fishers and public
+        - G. Funder (NOAA RESTORE reporting)
+        - H. Other
+  - type: dropdown
+    id: lead
+    attributes:
+      label: Lead
+      options:
+        - Holden
+        - Dave
+        - Other
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Why this matters and where it comes from (cite the paper, working paper, or meeting).
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: What "done" looks like, as a checklist.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: input
+    id: partner
+    attributes:
+      label: External partner(s), if any
+  - type: markdown
+    attributes:
+      value: After submitting, set the project fields (Objective, Stakeholder group, Product, Priority, Phase, Target date, Lead, External partner(s)) in the project sidebar; the dropdowns above only record the choices in the issue text.
