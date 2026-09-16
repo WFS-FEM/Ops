@@ -1,0 +1,462 @@
+# Initial backlog for the WFS-FEM Operationalization project (draft 3, 14 Sept 2026).
+# Field values must match the project's option labels exactly.
+# objective: I. Automation | II. Integration | III. Communication | PM (project management)
+# stakeholder (multi): A. SEFSC Gulf Fisheries Branch / SEDAR | B. Gulf IEA / ESR | C. Fisheries managers |
+#   D. Ecosystem modelers | E. Science community | F. Fishers and public | G. Funder (NOAA RESTORE reporting) | H. Other
+# product (multi): A. EwE model update | B. SEDAR Mrt | C. Shiny App | D. R package | E. IEA/ESR |
+#   F. Peer-reviewed paper | G. Report | H. Other
+# priority: P0 critical path | P1 high | P2 normal | P3 nice to have
+# phase: 2026 Q4 ... 2028 Q3 | Beyond award
+# lead: Holden | Dave | Other
+# milestone: title as created in WFS-FEM/Ops
+
+issues:
+  - id: 1
+    title: "Expand the one-page plan into a transition plan (scope, success criteria, timeline)"
+    objective: "PM (project management)"
+    stakeholder: ["G. Funder (NOAA RESTORE reporting)"]
+    product: ["G. Report"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Context
+      The one-pager ("Operational = Automated + Integrated + Communicated") is a good vision statement but not yet a plan: it does not state scope, what "operational" looks like when achieved, who does what by when, or what could stop it. NOAA's NAO 216-105B recommends a *transition plan* (an agreement between researchers and users) for any R&D product progressing beyond readiness level 4. The WFS-FEM is at roughly RL 7 (prototype demonstrated in an operational environment: SEDAR 72 projections in 2021, SEDAR 88 selectivity in 2025); the plan's job is to describe the path to RL 9 (deployed and used routinely). The proposal's own definition applies: operational means "protocols and formats that enable routine updates and reproducible model runs by more than just the developers."
+
+      ## Acceptance criteria
+      - [ ] Sections: scope (stocks in and out), success criteria, timeline to Sept 2028, roles (Chagaris, Harris, Hu, Stukel, Kranz, SEFSC analysts), risks
+      - [ ] Traceable to the NOAA RESTORE award deliverables and named end users (#2)
+      - [ ] Reviewed by Dave; shared with SEFSC partners for comment
+      - [ ] Committed to `docs/` in this repository
+
+      ## Sources
+      NAO 216-105B, https://www.noaa.gov/organization/administration/nao-216-105b-policy-on-research-and-development-transitions; Sagarese et al. 2026 (SEDAR105-WP-09); Turley et al. 2026, https://doi.org/10.1007/s11160-026-10052-5
+
+  - id: 2
+    title: "Trace the plan to the NOAA RESTORE award deliverables and named end users"
+    objective: "PM (project management)"
+    stakeholder: ["G. Funder (NOAA RESTORE reporting)"]
+    product: ["G. Report"]
+    priority: "P1 high"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Context
+      This work is the fourth objective ("operationalize the data and modeling framework through repeated application to reef fish stock assessments and ABC determinations") of the NOAA RESTORE award "Operationalizing the West Florida Shelf ecosystem model and application to red tides, stock assessment, and catch advice for Gulf of Mexico reef fish" (Oct 2023 to Sept 2028; PI Chagaris; co-PIs Hu/USF, Stukel/FSU, Kranz/FSU; resource managers Rindone/GMFMC and Hood/SERO). The award's milestone chart has seven milestones (MS1 meetings; MS2 remote sensing; MS3 biogeochemical modeling; MS4 fisheries ecosystem modeling; MS5 application to assessment and management; MS6 stakeholder engagement; MS7 reporting) with numbered tasks.
+
+      ## Acceptance criteria
+      - [ ] Crosswalk table mapping each award task (e.g., 4.4 Operationalizing WFS Ecospace, 5.10 Informing ABC determination) to project issues and products
+      - [ ] End users named on the award appear as external partners on the relevant issues
+      - [ ] Semiannual progress report dates added to the roadmap
+
+      ## Sources
+      NOAA RESTORE proposal and milestone chart (project files); project page, https://restoreactscienceprogram.noaa.gov/projects/red-tide-and-reef-fish-modeling
+
+  - id: 3
+    title: "Set up the Ops repository (README, issue templates, docs folder, blueprint)"
+    objective: "PM (project management)"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["H. Other"]
+    priority: "P1 high"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Acceptance criteria
+      - [ ] README with purpose, objectives, repository map (including the private input-pipeline repositories) and how the board is used
+      - [ ] Issue templates: task, meeting, decision
+      - [ ] `docs/operationalization-plan.md`, `docs/project-blueprint.md`, `docs/decisions.md`, `docs/backlog.yml`
+      - [ ] Project linked to the repository; auto-add workflow enabled
+
+  - id: 4
+    title: "Build an automated satellite red tide feed with the Hu lab"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P0 critical path"
+    phase: "2027 Q2"
+    lead: Holden
+    milestone: "M4 Automated monthly satellite feed operational"
+    labels: [code, pipeline]
+    partner: "Hu lab (USF Optical Oceanography Lab)"
+    body: |
+      ## Context
+      The satellite footprint is the weak link in the monthly red tide layer. RedTideMaps tracks VIIRS rasters only through 2024-12 and `process_VIIRS.R` contains no download step, so new months depend on files obtained by hand from the USF Optical Oceanography Lab. MODIS Aqua nFLH (the second option in the VIIRS > MODIS nFLH > buffered-hull cascade) will not remain a fallback: Aqua entered free drift in Dec 2021 and NASA's status page projects operation only into 2026. Sagarese et al. (2026) note that FLH is not measured by VIIRS and that new detection and severity methods will be required. Award task 2.3 (operationalize VIIRS red tide map development, 2025 to 2028) is the Hu lab's side of this.
+
+      ## Acceptance criteria
+      - [ ] Agreement with the Hu lab on a product, format, cadence and delivery mechanism (e.g., monthly VIIRS bloom-detection rasters via a stable URL or API)
+      - [ ] `process_VIIRS.R` (or successor) downloads the current month without manual steps
+      - [ ] Fallback behaviour when the feed is missing is documented and tested with a simulated outage
+      - [ ] Data-currency stamp written with each monthly run
+
+      ## Sources
+      WFS-FEM/RedTideMaps; Yao et al. 2026, https://doi.org/10.1016/j.rse.2026.115345; Sagarese et al. 2026 (SEDAR105-WP-09); NASA Aqua status, https://aqua.nasa.gov/
+
+  - id: 5
+    title: "Replace hard-coded paths in RedTideMaps run_redtide_maps.R with a config file and have a second person run it"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M2 Monthly pipeline reproducible"
+    labels: [code]
+    partner: ""
+    body: |
+      ## Context
+      `run_redtide_maps.R` hard-codes one user's paths (a `C:/Users/...` path and a OneDrive path), so nobody else can run it unchanged. This is the first step toward the milestone "monthly pipeline reproducible."
+
+      ## Acceptance criteria
+      - [ ] Paths moved to a config file (e.g., `config.yml` read with the `config` package, or `here::here()` relative paths) with an example committed
+      - [ ] README runbook: prerequisites, one-time setup, monthly run steps, expected outputs
+      - [ ] Holden runs the full monthly workflow on a different machine from documented instructions only
+      - [ ] Issues found during that run filed in RedTideMaps
+
+  - id: 6
+    title: "Reconcile the RedTideMaps README and script header on whether the FWC HAB pull is automatic"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P2 normal"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M2 Monthly pipeline reproducible"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Context
+      The README and the header of `run_redtide_maps.R` disagree on whether the FWC HAB cell-count pull from the ArcGIS REST endpoints is automatic or manual.
+
+      ## Acceptance criteria
+      - [ ] One documented behaviour, matching what the code does
+      - [ ] If manual steps remain, they are listed in the runbook (#5)
+
+  - id: 7
+    title: "Create an orchestration workflow that runs the monthly pipeline end to end and logs each run"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M2 Monthly pipeline reproducible"
+    labels: [code, pipeline, decision]
+    partner: ""
+    body: |
+      ## Context
+      Pieces exist (RedTideMaps builds the red tide driver in seconds; R4EwE drives EwE; EcospaceBasemap builds static layers; the EnvironmentalDrivers2EwE, Survey2EwE and SS2EwE repositories cover other inputs) but nothing runs them in sequence, records what ran with which inputs and versions, and publishes the outputs. This is the "living model" in Objective I. The EwE console is a Windows application, so the automated workflow needs a Windows host (scheduled task or self-hosted runner).
+
+      ## Decision needed
+      Where the orchestration lives: this repository, a new `WFS-FEM/Pipeline` repository, or inside RedTideMaps; and which Windows host runs it.
+
+      ## Acceptance criteria
+      - [ ] One entry point (R script or `targets` pipeline) that: refreshes drivers, runs the Ecospace scenario ensemble, exports products, and writes a run log (date, input data currency, model database version, R4EwE version, git commit)
+      - [ ] Runs on a schedule on a Windows host with EwE installed
+      - [ ] Failure of any step produces a readable error and does not overwrite the last good products
+      - [ ] Decision recorded in `docs/decisions.md`
+
+  - id: 8
+    title: "Extend the driver pipeline beyond red tide (DO, temperature, salinity, chlorophyll/NPP, effort)"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P2 normal"
+    phase: "2027 Q3"
+    lead: Holden
+    milestone: "M9 Full model"
+    labels: [code, pipeline]
+    partner: ""
+    body: |
+      ## Context
+      RedTideMaps automates only the red tide driver. The proposal (Objective 3) named the other input pipelines to automate: ERDDAP satellite fields, HYCOM temperature and salinity, NEMURO-GOM and VIIRS outputs, Stock Synthesis report extraction, landings and effort, and survey-based abundance and distribution time series. Some of these already have repositories (EnvironmentalDrivers2EwE, Survey2EwE, SS2EwE).
+
+      ## Acceptance criteria
+      - [ ] Inventory of drivers, sources, repositories, and the last month available for each
+      - [ ] Repeatable refresh script per driver, callable from the orchestration workflow (#7)
+      - [ ] Data-currency reported per driver in the run log
+
+  - id: 9
+    title: "Integrate hypoxia and BGC drivers from NEMURO-GOM (contingent on model performance)"
+    objective: "I. Automation"
+    stakeholder: ["B. Gulf IEA / ESR", "D. Ecosystem modelers"]
+    product: ["A. EwE model update", "E. IEA/ESR"]
+    priority: "P2 normal"
+    phase: "2028 Q1"
+    lead: Holden
+    milestone: "M5 Automated monthly BGC model feed operational"
+    labels: [EwE, pipeline]
+    partner: "Mike Stukel (FSU), Sven Kranz (FSU)"
+    body: |
+      ## Context
+      The model omits hypoxia for lack of dissolved-oxygen drivers (Vilas et al. 2023), which is part of why the Ecospace index and fishermen's LEK disagree for 2014 and 2018 (SEDAR105-WP-12; Turley et al. 2026). The award's biogeochemical component (NEMURO-GOM with K. brevis and oxygen; tasks 3.3 and 3.4) is meant to supply those drivers, and the proposal promised statistical linkages so that users need not run NEMURO-GOM themselves.
+
+      ## Acceptance criteria
+      - [ ] Status check with Stukel and Kranz on the BGC model, its outputs and delivery cadence
+      - [ ] If usable: DO or hypoxia layer added to the driver pipeline (#8) and a sensitivity run reported
+      - [ ] If not: documented as a limitation in the transition plan and products
+
+      ## Sources
+      Vilas et al. 2023, https://doi.org/10.1038/s41598-023-29327-z; Moller et al. 2026 (SEDAR105-WP-12); Turley et al. 2026
+
+  - id: 10
+    title: "Version and archive the WFS-FEM model database as a tagged release with a DOI"
+    objective: "I. Automation"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["A. EwE model update"]
+    priority: "P1 high"
+    phase: "2027 Q2"
+    lead: Holden
+    milestone: "M11 All products fully archived"
+    labels: [docs, EwE]
+    partner: ""
+    body: |
+      ## Context
+      There is no versioned repository or release of the WFS-FEM model database itself, nor of the input time series. Every SEDAR product should cite a tagged model version and package version with a DOI. The data management plan commits to NCEI for long-term archive, EcoBase for the Ecopath model, and IR@UF for the .accdb database; the NCEI and UF IR archive for Vilas et al. (2023) is the precedent.
+
+      ## Acceptance criteria
+      - [ ] Decision on where the database is versioned (GitHub release with LFS, Zenodo, IR@UF, NCEI)
+      - [ ] First tagged release with DOI and a changelog
+      - [ ] Versioning policy in `docs/` (every SEDAR or SSC product cites a tagged model version and R4EwE version)
+
+  - id: 11
+    title: "Stakeholder meeting: Gulf assessment group. Feedback on products (Shiny summaries by species, data download, animations, netCDF)"
+    objective: "II. Integration"
+    stakeholder: ["A. SEFSC Gulf Fisheries Branch / SEDAR"]
+    product: ["B. SEDAR Mrt", "C. Shiny App"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [meeting]
+    partner: "Katie Siegfried, Skyler Sagarese, Lisa Ailloud, Shanae Allen (NOAA SEFSC)"
+    body: |
+      ## Purpose
+      Ask the assessment team what products they want and in what form. Candidates from the plan: an R Shiny app with automated markdown summaries by species that feed data inputs; the ability to download data; animations; spatial data as netCDF.
+
+      ## Questions to ask
+      - Which use cases matter for the next assessments, and by what deadline? (severity flags for red tide fleet years; age-specific selectivity; monthly Mrt with uncertainty for projections; a baseline Mrt distribution for reference points; validation of an extra-mortality fleet)
+      - Preferred formats and uncertainty representation (CV, distribution, scenario ensemble)?
+      - What would make WFS-FEM outputs usable in a base model rather than a sensitivity run?
+
+      ## Outcome
+      _Fill in after the meeting; open follow-up issues._
+
+      ## Sources
+      Chagaris 2025 (SEDAR 88 WP); Sagarese et al. 2026 (SEDAR105-WP-09); Moller et al. 2026 (SEDAR105-WP-12)
+
+  - id: 12
+    title: "Stakeholder meeting: Gulf IEA. How products could be incorporated into ESRs (satellite products, BGC outputs, synthetic EM outputs, ecological indicators)"
+    objective: "II. Integration"
+    stakeholder: ["B. Gulf IEA / ESR"]
+    product: ["E. IEA/ESR"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [meeting]
+    partner: "Mandy Karnauskas, Matt McPherson, Brendan Turley (NOAA SEFSC)"
+    body: |
+      ## Purpose
+      Identify what the Gulf IEA and ecosystem status reports could use from this work: satellite red tide products, biogeochemical products (hypoxia, if the model works), and synthetic ecosystem-model outputs or ecological indicators. Identify individual contacts. Karnauskas chairs the Council's Ecosystem Technical Committee, so this is also the entry point to the Fishery Ecosystem Plan (award task 5.12).
+
+      ## Outcome
+      _Fill in after the meeting; open follow-up issues._
+
+  - id: 13
+    title: "Stakeholder meeting: fisheries managers. Feedback on products (Shiny apps, extension articles, others)"
+    objective: "II. Integration"
+    stakeholder: ["C. Fisheries managers"]
+    product: ["C. Shiny App", "H. Other"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [meeting]
+    partner: "Ryan Rindone, John Froeschke (GMFMC); NOAA SERO; Mike Allen; CJ Sweetman (FWC)"
+    body: |
+      ## Purpose
+      Learn what managers want from the redtideVIS update and from extension articles, and how WFS-FEM products should reach the SSC and Council (award task 5.10, informing ABC determination; 5.11, FMP amendments).
+
+      ## Outcome
+      _Fill in after the meeting; feed requirements into #18 and #20._
+
+  - id: 14
+    title: "Stakeholder meeting: fishers. Feedback on products (Shiny apps, extension articles, others)"
+    objective: "II. Integration"
+    stakeholder: ["F. Fishers and public"]
+    product: ["C. Shiny App", "H. Other"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [meeting]
+    partner: "Michael Sipos (Florida Sea Grant), Casey Streeter (FCWC)"
+    body: |
+      ## Purpose
+      Learn what fishers want from the visualizer and outreach, and treat the fishing community as a source of information (local ecological knowledge) as well as an audience. The award's stakeholder engagement plan calls for small-group in-person meetings in Tampa Bay and SW Florida (task 6.2), organized with Sea Grant.
+
+      ## Outcome
+      _Fill in after the meeting; feed requirements into #18 and #20._
+
+  - id: 15
+    title: "Finalize the deliverables table"
+    objective: "II. Integration"
+    stakeholder: ["A. SEFSC Gulf Fisheries Branch / SEDAR"]
+    product: ["B. SEDAR Mrt"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M1 Fall 2026 stakeholder meetings"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Context
+      "Inform stock assessment reference points" is narrower than the ways WFS-FEM output is actually used or requested:
+      1. Which years get a non-zero red tide fleet (bycatch-fleet approach; SEDAR105-WP-12): needs a year-by-year severity flag with a stated threshold.
+      2. Age-specific selectivity of the red tide fleet (SEDAR 88 WP, Table 2): needs rescaled age vectors per event year.
+      3. Short-term projection scenarios (SEDAR 72 precedent): needs monthly Mrt through the current month, with uncertainty, on the SSC calendar.
+      4. A baseline red tide mortality for reference-point projections (SEDAR105-WP-09 recommends including it in every projection year): the 2002 to present series is a natural source.
+      5. Validation of an "extra mortality fleet" estimated in all years (SEDAR105-WP-12).
+
+      ## Acceptance criteria
+      - [ ] Table: use case, output, format, uncertainty, deadline, recipient
+      - [ ] Reviewed with the assessment group (#11)
+      - [ ] Committed to `docs/`
+
+      ## Sources
+      Moller et al. 2026 (SEDAR105-WP-12); Sagarese et al. 2026 (SEDAR105-WP-09); Chagaris 2025 (SEDAR 88 WP)
+
+  - id: 16
+    title: "Support the SEDAR 105 (gag) Red Tide Mortality TWG and deliver requested Mrt products by the data deadline"
+    objective: "II. Integration"
+    stakeholder: ["A. SEFSC Gulf Fisheries Branch / SEDAR"]
+    product: ["B. SEDAR Mrt"]
+    priority: "P0 critical path"
+    phase: "2026 Q4"
+    lead: Holden
+    milestone: "M3 SEDAR 105 (gag) red tide products delivered"
+    labels: [EwE]
+    partner: "Gulf assessment team (Skyler Sagarese, Molly Moller, NOAA SEFSC)"
+    body: |
+      ## Context
+      SEDAR 105 (gag) is the live opportunity. Its Red Tide Mortality TWG met on 8 Sept 2026 and completion is expected late 2026. SEDAR105-WP-12 tentatively recommends an extra-mortality fleet estimated in all years and notes that the Ecospace index (Chagaris 2025) could validate red tide events.
+
+      ## Acceptance criteria
+      - [ ] Confirm what the TWG needs from WFS-FEM and the deadline
+      - [ ] Deliver (e.g., annual Mrt index with CV, severity flags, selectivity vectors) as CSV plus a short working paper or memo, citing model and package versions
+      - [ ] Record the request and delivery in `docs/decisions.md`
+
+      ## Sources
+      Federal Register, https://www.federalregister.gov/documents/2026/08/07/2026-16095/; Moller et al. 2026 (SEDAR105-WP-12); SEDAR 105, https://sedarweb.org/assessments/sedar-105/
+
+  - id: 17
+    title: "R4EwE: pkgdown site, restore the vignette as .Rmd, and write usage vignettes"
+    objective: "III. Communication"
+    stakeholder: ["D. Ecosystem modelers", "E. Science community"]
+    product: ["D. R package"]
+    priority: "P1 high"
+    phase: "2027 Q2"
+    lead: Dave
+    milestone: "M6 R package (R4EwE v1.0)"
+    labels: [docs]
+    partner: ""
+    body: |
+      ## Context
+      As of Sept 2026 the package has 75 exported functions, a README, a PDF manual and an MIT license, but no tests, no CI and no pkgdown site, and the only vignette was renamed from .Rmd to .md, so `R CMD build` produces no vignettes. "Usage vignettes" is a listed product and needs an author and time. Two sentences worth adding to the README: R4EwE drives the EwE software from R, which distinguishes it from NOAA's Rpath (an R reimplementation of EwE), and the name echoes r4ss.
+
+      ## Acceptance criteria
+      - [ ] Vignette restored as .Rmd and building
+      - [ ] At least two usage vignettes: (1) run an Ecospace scenario ensemble and summarize Mrt; (2) build and write a monthly driver
+      - [ ] pkgdown site deployed via GitHub Pages
+      - [ ] (stretch) `testthat` suite and GitHub Actions R CMD check
+
+      ## Sources
+      https://github.com/dchagaris/R4EwE; Rpath, https://noaa-edab.github.io/Rpath/
+
+  - id: 18
+    title: "redtideVIS v2: current-month Mrt with uncertainty, data-currency stamp, summaries, downloads, animations, netCDF"
+    objective: "III. Communication"
+    stakeholder: ["A. SEFSC Gulf Fisheries Branch / SEDAR", "C. Fisheries managers", "F. Fishers and public"]
+    product: ["C. Shiny App"]
+    priority: "P1 high"
+    phase: "2027 Q3"
+    lead: Holden
+    milestone: "M7 Shiny App (redtideVIS v2)"
+    labels: [code]
+    partner: ""
+    body: |
+      ## Context
+      The plan lists an update to https://redtidevis.shinyapps.io/redtideapp/. From the meeting with Dave: automated markdown summaries by species (that can feed assessment data inputs), data download, animations, and spatial data as netCDF. The update should also show current-month Mrt with uncertainty and a data-currency stamp so users know how fresh the model is.
+
+      ## Acceptance criteria
+      - [ ] Requirements confirmed with the assessment group (#11), managers (#13) and fishers (#14)
+      - [ ] App reads the standard output set produced by the orchestration workflow (#7)
+      - [ ] Deployed with a visible data-currency stamp and version
+
+  - id: 19
+    title: "Publish the redtideVIS app source in the WFS-FEM organization"
+    objective: "III. Communication"
+    stakeholder: ["D. Ecosystem modelers"]
+    product: ["C. Shiny App"]
+    priority: "P2 normal"
+    phase: "2027 Q1"
+    lead: Holden
+    milestone: "M7 Shiny App (redtideVIS v2)"
+    labels: [code]
+    partner: ""
+    body: |
+      ## Acceptance criteria
+      - [ ] Repository `WFS-FEM/redtideVIS` with the current app source, license and README
+      - [ ] Deployment instructions (shinyapps.io)
+      - [ ] Linked to this project
+
+  - id: 20
+    title: "Extension and outreach articles (EDIS one-pagers)"
+    objective: "III. Communication"
+    stakeholder: ["C. Fisheries managers", "F. Fishers and public"]
+    product: ["H. Other"]
+    priority: "P2 normal"
+    phase: "2027 Q4"
+    lead: Holden
+    milestone: "M7 Shiny App (redtideVIS v2)"
+    labels: [outreach]
+    partner: ""
+    body: |
+      ## Context
+      Turley et al. (2026) advise defining metrics of success and communicating successes to counter "red tide fatigue." Extension articles are the plan's channel to managers and fishers.
+
+      ## Acceptance criteria
+      - [ ] Topics agreed after the managers (#13) and fishers (#14) meetings
+      - [ ] At least one EDIS or one-page article published
+      - [ ] Links from the redtideVIS app and the Ops README
+
+      ## Sources
+      Turley et al. 2026, https://doi.org/10.1007/s11160-026-10052-5
+
+  - id: 21
+    title: "Peer-reviewed paper on operationalizing the WFS-FEM"
+    objective: "III. Communication"
+    stakeholder: ["E. Science community"]
+    product: ["F. Peer-reviewed paper"]
+    priority: "P2 normal"
+    phase: "2028 Q2"
+    lead: Holden
+    milestone: "M11 All products fully archived"
+    labels: [paper]
+    partner: ""
+    body: |
+      ## Context
+      A methods and transition paper (award task 4.5): the automated pipeline, the ensemble product, validation results, and the readiness-level path from RL 7 to RL 9, with lessons for other ecosystem models feeding assessments.
+
+      ## Acceptance criteria
+      - [ ] Outline agreed with co-authors
+      - [ ] Draft submitted
