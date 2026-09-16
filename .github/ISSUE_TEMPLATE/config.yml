@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Project board
+    url: https://github.com/orgs/WFS-FEM/projects/4
+    about: See the WFS-FEM Operationalization project for the full plan and roadmap.
