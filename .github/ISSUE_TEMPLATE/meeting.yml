@@ -1,0 +1,26 @@
+name: Meeting
+description: Schedule a meeting and record its outcome
+title: "[Meeting] "
+labels: ["meeting"]
+body:
+  - type: input
+    id: participants
+    attributes:
+      label: Participants
+    validations:
+      required: true
+  - type: input
+    id: when
+    attributes:
+      label: Target date or window
+  - type: textarea
+    id: purpose
+    attributes:
+      label: Purpose and questions to ask
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Outcome (fill in after the meeting)
+      description: Decisions, requests, follow-up issues opened.
